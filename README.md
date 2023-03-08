@@ -45,3 +45,59 @@ const count = useSelector((state) => {
 });
 const dispatch = useDispatch();
 ```
+
+## 리덕스 툴킷 데이터패칭
+
+1. `npm i axios` 설치
+
+2. Counter.jsx
+
+```javascript
+<button
+  onClick={() => {
+    dispatch(fetchIncrement({ count }));
+  }}>
+  Fetch Increment
+</button>
+```
+
+3. counterSlice.js
+
+```javascript
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+export const fetchIncrement = createAsyncThunk("counter/fetchIncrement", async (value) => {
+  console.log(value);
+  const response = await axios.put("/counter/increment", { value: value.count });
+  return response;
+});
+
+...
+
+extraReducers: {
+    [fetchIncrement.fulfilled]: (state, action) => {
+        console.log(state.value);
+        console.log(action.payload.data.value);
+        state.value = action.payload.data.value;
+    },
+},
+
+```
+
+4. handler.js
+
+```javascript
+import { rest } from "msw";
+
+export const handler = [
+  rest.put("http://localhost:3001/counter/increment", async (req, res, ctx) => {
+    const { value } = req.body;
+    return res(
+      ctx.json({
+        value: value + 2,
+      })
+    );
+  }),
+];
+```

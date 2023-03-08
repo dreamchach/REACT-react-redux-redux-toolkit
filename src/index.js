@@ -5,6 +5,11 @@ import { store } from "./app/store";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+if (process.env.NODE_ENV === "development") {
+  const { worker } = require("./mock/browser");
+  worker.start();
+}
+
 const container = document.getElementById("root");
 const root = createRoot(container);
 
