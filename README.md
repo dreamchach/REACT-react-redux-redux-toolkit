@@ -1,46 +1,47 @@
-# Getting Started with Create React App and Redux
+# 리덕스 툴킷 사용법
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+1. store.js 설정
 
-## Available Scripts
+```javascript
+const rootReducer = combineReducers({
+  counter: counterReducer,
+});
 
-In the project directory, you can run:
+export default configureStore({
+  reducer: rootReducer,
+});
+```
 
-### `npm start`
+`combineReducers`는 여러 전역관리 데이터를 모아주는 역할을 함
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+2. index.js 설정
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```javascript
+<Provider store={store}>
+    <App>
+</Provider>
+```
 
-### `npm test`
+App컴포넌트를 `<Provider store={store}>`로 감싸줄 것
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. src/feature/counter/counterSlice.js 설정
+   `createSlice`로 `name`과 `initialState`와 `reducers`를 설정할 것
 
-### `npm run build`
+- `reducers`의 value값은 함수로 설정할 것
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```javascript
+{reducers.key, reducers.key, reducers.key} = '컴포넌트명'.actions
+export default '컴포넌트명'.reducers
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. counter/Counter.jsx 설정
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- useSelector설정
+- useDispatch설정
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```javascript
+const count = useSelector((state) => {
+  state.counter.value;
+});
+const dispatch = useDispatch();
+```
